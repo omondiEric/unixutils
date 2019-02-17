@@ -1,27 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+/* my-cat.c -- copies to stdout the contents of whatever files are passed
+ * to it.  If an invalid file is found, program will terminate.
+ */ 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
-    printf("usage: ./my-cat <filename>");
+     exit(0);
   }
-  FILE* file = fopen(argv[1], "r");
-  if (file == NULL) {
-    printf("cannot open file\n");
-    exit(1);
+  int fileCount = 1;
+  
+  //as long as there are more files left to open
+  while (fileCount < argc) {
+    FILE* file = fopen(argv[fileCount],"r");
+    if (file == NULL) { //make sure the file really exists
+      printf("my-cat: cannot open file\n");
+      exit(1);
+    }
+
+    //print to stdout using currentLine as a buffer of variable size
+    char *currentLine = NULL;
+    size_t len = 0;
+    while (getline(&currentLine, &len, file) != -1) {
+      printf("%s", currentLine);
+    }
+    free(currentLine);
+    fclose(file);
+    fileCount++; //move to the next file
   }
-  char currentLine[800];
-  //while (fgets(currentLine, 2000, file) != NULL) { //!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  while (scanf("%800s", currentLine)) { 
-    printf("%s", currentLine);
-  }
-  fclose(file);
+  exit(0);
 }
-
-//ask bill about how to set buffer size!
-
-
-//there should be a version of fgets that specifically sets the buffer size...same idea as what we have now but you can't have an overflow. the version of fgets or whatever will go until \n OR the specified size
-
-  //he also said that 800 is a good limit to use
