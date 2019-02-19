@@ -1,3 +1,5 @@
+//Louisa Nyhus and Steven Omondi
+
 #include <stdio.h>
 #include <stdlib.h>
 
