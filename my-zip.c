@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <limits.h>
 
 /* my-zip.c -- encodes a file by saving each character once (in ASCII),
  * preceded by the number of sequential occurrences of that character.
@@ -29,12 +30,13 @@ void zipFile(char* f) {
       //for every sequence of characters
       currPos = 0;
       currChar = currentLine[linePos];
-      while (currentLine[linePos+currPos] == currChar) {
+      while (currentLine[linePos+currPos] == currChar && (currPos < UINT_MAX)) {
 	currPos++;
       }
       linePos += currPos;
-      fwrite(&currPos, sizeof(currPos), (size_t) 1, stdout); //better to just call 32 or sizeof?
-      fwrite(&currChar, sizeof(currChar), (size_t) 1, stdout);    //is sizeof char ok????
+      //printf("%hu", currPos);
+      fwrite(&currPos, sizeof(currPos), (size_t) 1, stdout);
+      fwrite(&currChar, sizeof(currChar), (size_t) 1, stdout);
     }
   }
   free(currentLine);
@@ -53,12 +55,3 @@ int main(int argc, char* argv[]) {
   }
   exit(0);
 }
-
-
-//from office hours: we need to loop through to ensure that if we have 2^32+1 characters it just prints 1!
-
-
-
-
-//site says ints should be 4 bytes??????????????
-//do we care if newlines get dumped in with one each????????
