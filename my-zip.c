@@ -34,7 +34,6 @@ void zipFile(char* f) {
 	currPos++;
       }
       linePos += currPos;
-      //printf("%hu", currPos);
       fwrite(&currPos, sizeof(currPos), (size_t) 1, stdout);
       fwrite(&currChar, sizeof(currChar), (size_t) 1, stdout);
     }
